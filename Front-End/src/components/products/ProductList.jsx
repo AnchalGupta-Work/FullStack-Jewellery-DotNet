@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { useCart } from '../../context/CartContext';
 import { productService } from '../../services/productService';
 import { formatPrice } from '../../utils/formatters';
 import { toast } from 'react-toastify';
+import ProductCard from './ProductCard';
 import './ProductList.css';
 
+const CATEGORIES = [
+  { id: 'all', name: 'All Jewelry', icon: 'bi-grid' },
+  { id: '1', name: 'Rings', icon: 'bi-circle', description: 'Engagement & Fashion Rings' },
+  { id: '2', name: 'Necklaces', icon: 'bi-gem', description: 'Chains & Pendants' },
+  { id: '3', name: 'Earrings', icon: 'bi-diamond', description: 'Studs & Drops' },
+  { id: '4', name: 'Bracelets', icon: 'bi-circle-half', description: 'Bangles & Chains' },
+  { id: '5', name: 'Traditional', icon: 'bi-flower1', description: 'Temple Jewelry' },
+  { id: '6', name: 'Sets', icon: 'bi-collection', description: 'Matching Sets' }
+];
+
 const ProductList = () => {
-  const { user } = useAuth();
-  const { addToCart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -18,7 +25,6 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-  const [processingItems, setProcessingItems] = useState(new Set());
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -47,29 +53,6 @@ const ProductList = () => {
       toast.error('Error loading products');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleAddToCart = async (productId) => {
-    if (!user) {
-      navigate('/login', { state: { from: location.pathname } });
-      return;
-    }
-
-    try {
-      setProcessingItems(prev => new Set(prev).add(productId));
-      const result = await addToCart(productId, 1);
-      if (result.success) {
-        toast.success('Product added to cart');
-      } else {
-        toast.error(result.message);
-      }
-    } finally {
-      setProcessingItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(productId);
-        return newSet;
-      });
     }
   };
 
@@ -127,13 +110,12 @@ const ProductList = () => {
     return (
       <div className="products-grid">
         {[...Array(8)].map((_, index) => (
-          <div key={index} className="product-card">
+          <div key={index} className="product-card skeleton">
             <div className="product-image-wrapper skeleton"></div>
-            <div className="listing-product-info">
+            <div className="product-info">
               <div className="skeleton" style={{ height: '24px', width: '80%', marginBottom: '8px' }}></div>
               <div className="skeleton" style={{ height: '16px', width: '60%', marginBottom: '16px' }}></div>
-              <div className="skeleton" style={{ height: '32px', width: '40%', marginBottom: '16px' }}></div>
-              <div className="skeleton" style={{ height: '40px' }}></div>
+              <div className="skeleton" style={{ height: '32px', width: '40%' }}></div>
             </div>
           </div>
         ))}
@@ -157,71 +139,56 @@ const ProductList = () => {
       <div className="container">
         <div className="row g-4">
           {/* Filters Panel */}
-          {/* Filters Panel */}
-<div className="col-lg-3">
-  <div className={`filters-panel ${showFilters ? 'show' : ''}`}>
-    <div className="d-flex d-lg-none justify-content-between align-items-center mb-3">
-      <h5 className="mb-0">Filters</h5>
-      <button 
-        className="btn-close" 
-        onClick={() => setShowFilters(false)}
-      ></button>
-    </div>
+          <div className="col-lg-3">
+            <div className={`filters-panel ${showFilters ? 'show' : ''}`}>
+              <div className="d-flex d-lg-none justify-content-between align-items-center mb-3">
+                <h5 className="mb-0">Filters</h5>
+                <button 
+                  className="btn-close" 
+                  onClick={() => setShowFilters(false)}
+                ></button>
+              </div>
 
-    <div className="filter-section">
-      <h6 className="filter-title">Categories</h6>
-      <div className="form-check mb-2">
-        <input
-          type="radio"
-          className="form-check-input"
-          name="category"
-          id="all"
-          checked={filters.category === 'all'}
-          onChange={() => handleFilterChange('category', 'all')}
-        />
-        <label className="form-check-label" htmlFor="all">
-          All Categories
-        </label>
-      </div>
-      {['1', '2', '3', '4'].map((catId) => (
-        <div className="form-check mb-2" key={catId}>
-          <input
-            type="radio"
-            className="form-check-input"
-            name="category"
-            id={`cat-${catId}`}
-            checked={filters.category === catId}
-            onChange={() => handleFilterChange('category', catId)}
-          />
-          <label className="form-check-label" htmlFor={`cat-${catId}`}>
-            {catId === '1' ? 'Rings' :
-             catId === '2' ? 'Necklaces' :
-             catId === '3' ? 'Earrings' : 'Bracelets'}
-          </label>
-        </div>
-      ))}
-    </div>
+              <div className="filter-section">
+                <h6 className="filter-title">Categories</h6>
+                {CATEGORIES.map((category) => (
+                  <div className="form-check mb-2" key={category.id}>
+                    <input
+                      type="radio"
+                      className="form-check-input"
+                      name="category"
+                      id={`cat-${category.id}`}
+                      checked={filters.category === category.id.toString()}
+                      onChange={() => handleFilterChange('category', category.id.toString())}
+                    />
+                    <label className="form-check-label" htmlFor={`cat-${category.id}`}>
+                      <i className={`bi ${category.icon} me-2`}></i>
+                      {category.name}
+                    </label>
+                  </div>
+                ))}
+              </div>
 
-    <div className="filter-section">
-      <h6 className="filter-title">Price Range</h6>
-      <div className="price-range-slider">
-        <input
-          type="range"
-          className="form-range"
-          min="0"
-          max="250000"
-          step="5000"
-          value={filters.maxPrice}
-          onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-        />
-        <div className="d-flex justify-content-between">
-          <span>₹0</span>
-          <span>{formatPrice(filters.maxPrice)}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+              <div className="filter-section">
+                <h6 className="filter-title">Price Range</h6>
+                <div className="price-range-slider">
+                  <input
+                    type="range"
+                    className="form-range"
+                    min="0"
+                    max="250000"
+                    step="5000"
+                    value={filters.maxPrice}
+                    onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
+                  />
+                  <div className="d-flex justify-content-between">
+                    <span>{formatPrice(0)}</span>
+                    <span>{formatPrice(filters.maxPrice)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Products Grid */}
           <div className="col-lg-9">
@@ -282,52 +249,7 @@ const ProductList = () => {
             ) : (
               <div className="products-grid">
                 {filteredProducts.map((product) => (
-                  <div key={product.id} className="product-card">
-                    {/* Quick View Button */}
-                    <button 
-                      className="quick-view-btn btn btn-light shadow-sm"
-                      onClick={() => navigate(`/products/${product.id}`)}
-                    >
-                      <i className="bi bi-eye"></i>
-                    </button>
-
-                    {/* Product Image */}
-                    <div className="product-image-wrapper" onClick={() => navigate(`/products/${product.id}`)}>
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="product-image"
-                        onError={(e) => { e.target.src = '/placeholder.jpg' }}
-                      />
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="listing-product-info">
-                      <h3 className="product-name text-truncate">{product.name}</h3>
-                      <div className="product-category">{product.categoryName}</div>
-                      <div className="product-price">{formatPrice(product.price)}</div>
-                      
-                      <div className="product-actions">
-                        <button
-                          className="btn btn-outline-secondary product-btn"
-                          onClick={() => navigate(`/products/${product.id}`)}
-                        >
-                          View Details
-                        </button>
-                        <button
-                          className="btn btn-primary product-btn"
-                          onClick={() => handleAddToCart(product.id)}
-                          disabled={processingItems.has(product.id)}
-                        >
-                          {processingItems.has(product.id) ? (
-                            <span className="spinner-border spinner-border-sm" role="status" />
-                          ) : (
-                            <i className="bi bi-cart-plus"></i>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             )}

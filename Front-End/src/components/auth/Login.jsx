@@ -151,6 +151,11 @@ const Login = () => {
                   label="Password"
                   placeholder="Enter your password"
                 />
+                <div className="text-center mt-3">
+  <Link to="/forgot-password" className="text-decoration-none">
+    Forgot Password?
+  </Link>
+</div>
 
                 <button
                   type="submit"
@@ -167,11 +172,7 @@ const Login = () => {
                   )}
                 </button>
 
-                <div className="text-center mt-3">
-  <Link to="/forgot-password" className="text-decoration-none">
-    Forgot Password?
-  </Link>
-</div>
+                
 
                 <div className="text-center mt-4">
                   <p className="mb-0">

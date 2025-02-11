@@ -6,7 +6,7 @@ const Carousel = () => {
       <div className="carousel-inner">
         <div className="carousel-item active">
           <img
-            src="https://cdn.bradojewellery.com/b/1920x/1738398607419.jpeg"
+            src="https://www.giva.co/cdn/shop/files/Hero_Banner_Web__5_-min.jpg?v=1739183578&width=2000"
             className="d-block w-100"
             alt="Slide 1"
           />

@@ -4,10 +4,6 @@ import { formatPrice } from '../../utils/formatters';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
-  const handleImageError = (e) => {
-    e.target.src = '/placeholder.jpg'; // Fallback image
-  };
-
   const calculateDiscount = () => {
     if (!product.originalPrice || product.originalPrice <= product.price) return 0;
     return Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
@@ -17,31 +13,41 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="product-card">
-      <Link to={`/products/${product.id}`} className="text-decoration-none">
-        <div className="product-image-wrapper">
-          <img 
-            src={product.imageUrl || '/placeholder.jpg'} 
-            alt={product.name}
-            className="product-image"
-            onError={handleImageError}
-          />
-          {discount > 0 && (
-            <div className="discount-badge">
-              {discount}% OFF
-            </div>
-          )}
-        </div>
-        <div className="product-info">
-          <h3 className="product-name">{product.name}</h3>
-          <p className="product-category">{product.categoryName}</p>
-          <div className="price-section">
-            <span className="current-price">{formatPrice(product.price)}</span>
-            {discount > 0 && (
-              <span className="original-price">
-                {formatPrice(product.originalPrice)}
-              </span>
-            )}
+      {/* Quick View Button */}
+      <Link 
+        to={`/products/${product.id}`}
+        className="quick-view-btn"
+        aria-label="Quick view"
+      >
+        <i className="bi bi-eye"></i>
+      </Link>
+
+      {/* Product Link and Image */}
+      <Link to={`/products/${product.id}`} className="product-image-wrapper">
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="product-image"
+          onError={(e) => { e.target.src = '/placeholder.jpg' }}
+        />
+        {discount > 0 && (
+          <div className="discount-badge">
+            {discount}% OFF
           </div>
+        )}
+      </Link>
+
+      {/* Product Info */}
+      <Link to={`/products/${product.id}`} className="product-info">
+        <h3 className="product-name">{product.name}</h3>
+        <div className="product-category">{product.categoryName}</div>
+        <div className="price-section">
+          <span className="current-price">{formatPrice(product.price)}</span>
+          {discount > 0 && (
+            <span className="original-price">
+              {formatPrice(product.originalPrice)}
+            </span>
+          )}
         </div>
       </Link>
     </div>
