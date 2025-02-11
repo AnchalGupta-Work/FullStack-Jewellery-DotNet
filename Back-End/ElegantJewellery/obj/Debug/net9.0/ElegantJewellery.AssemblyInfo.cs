@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ElegantJewellery")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c00230d6662104f36a83e3fba64638b0511076c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("ElegantJewellery")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ElegantJewellery")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

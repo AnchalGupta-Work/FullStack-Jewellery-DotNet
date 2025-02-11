@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElegantJewellery.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250207115501_init")]
+    [Migration("20250211002723_init")]
     partial class init
     {
         /// <inheritdoc />

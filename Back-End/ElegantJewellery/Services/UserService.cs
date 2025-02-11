@@ -11,17 +11,91 @@ public class UserService : IUserService
     private readonly IJwtService _jwtService;
     private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
     public UserService(
         IGenericRepository<User> userRepository,
         IJwtService jwtService,
         IEmailService emailService,
-        IMapper mapper)
+        IMapper mapper,
+        IConfiguration configuration)
     {
         _userRepository = userRepository;
         _jwtService = jwtService;
         _emailService = emailService;
         _mapper = mapper;
+        _configuration = configuration;
+    }
+
+    public async Task<ApiResponse<bool>> ForgotPasswordAsync(string email)
+    {
+        try
+        {
+            var users = await _userRepository.GetAllAsync();
+            var user = users.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+
+            if (user == null)
+            {
+                return ApiResponse<bool>.ErrorResponse("User not found");
+            }
+
+            // Generate reset token (using JWT for simplicity)
+            var token = _jwtService.GeneratePasswordResetToken(user);
+
+            // Send reset email
+            await _emailService.SendPasswordResetEmailAsync(
+                user.Email,
+                $"{user.FirstName} {user.LastName}",
+                token
+            );
+
+            return ApiResponse<bool>.SuccessResponse(true, "Password reset instructions sent to your email");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<bool>.ErrorResponse(
+                "Error processing password reset request",
+                new List<string> { ex.Message }
+            );
+        }
+    }
+
+    public async Task<ApiResponse<bool>> ResetPasswordAsync(string token, string newPassword)
+    {
+        try
+        {
+            // Validate token and get user ID
+            var userId = _jwtService.ValidatePasswordResetToken(token);
+            if (userId == null)
+            {
+                return ApiResponse<bool>.ErrorResponse("Invalid or expired reset token");
+            }
+
+            var user = await _userRepository.GetByIdAsync(userId.Value);
+            if (user == null)
+            {
+                return ApiResponse<bool>.ErrorResponse("User not found");
+            }
+
+            // Update password
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            await _userRepository.UpdateAsync(user);
+
+            // Send confirmation email
+            await _emailService.SendPasswordChangeConfirmationAsync(
+                user.Email,
+                $"{user.FirstName} {user.LastName}"
+            );
+
+            return ApiResponse<bool>.SuccessResponse(true, "Password reset successful");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<bool>.ErrorResponse(
+                "Error resetting password",
+                new List<string> { ex.Message }
+            );
+        }
     }
 
     public async Task<ApiResponse<AuthResponseDto>> RegisterAsync(UserDto userDto)

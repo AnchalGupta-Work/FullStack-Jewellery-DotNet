@@ -18,6 +18,8 @@ import AdminOrders from './components/admin/orders/AdminOrders';
 import HomePage from './components/home/Homepage';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 import ProductList from './components/products/ProductList';
 import ProductDetails from './components/products/ProductDetails';
 import Cart from './components/cart/Cart';
@@ -25,6 +27,7 @@ import Checkout from './components/checkout/Checkout';
 import OrderList from './components/orders/OrderList';
 import OrderDetails from './components/orders/OrderDetails';
 import OrderTracking from './components/orders/OrderTracking';
+import Profile from './components/profile/Profile';
 
 // Styles
 import 'react-toastify/dist/ReactToastify.css';
@@ -78,38 +81,58 @@ const App = () => {
                   </GuestRoute>
                 }
               />
+              <Route
+                path="/forgot-password"
+                element={
+                  <GuestRoute>
+                    <CustomerLayout>
+                      <ForgotPassword />
+                    </CustomerLayout>
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/reset-password"
+                element={
+                  <GuestRoute>
+                    <CustomerLayout>
+                      <ResetPassword />
+                    </CustomerLayout>
+                  </GuestRoute>
+                }
+              />
 
-             {/* Public Routes */}
-<Route
-  path="/"
-  element={
-    <RouteGuard path="/">
-      <CustomerLayout>
-        <HomePage />
-      </CustomerLayout>
-    </RouteGuard>
-  }
-/>
-<Route
-  path="/products"
-  element={
-    <RouteGuard path="/products">
-      <CustomerLayout>
-        <ProductList />
-      </CustomerLayout>
-    </RouteGuard>
-  }
-/>
-<Route
-  path="/products/:id"
-  element={
-    <RouteGuard path="/products">
-      <CustomerLayout>
-        <ProductDetails />
-      </CustomerLayout>
-    </RouteGuard>
-  }
-/>
+              {/* Public Routes */}
+              <Route
+                path="/"
+                element={
+                  <RouteGuard path="/">
+                    <CustomerLayout>
+                      <HomePage />
+                    </CustomerLayout>
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/products"
+                element={
+                  <RouteGuard path="/products">
+                    <CustomerLayout>
+                      <ProductList />
+                    </CustomerLayout>
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/products/:id"
+                element={
+                  <RouteGuard path="/products">
+                    <CustomerLayout>
+                      <ProductDetails />
+                    </CustomerLayout>
+                  </RouteGuard>
+                }
+              />
 
               {/* Protected Customer Routes */}
               <Route
@@ -173,6 +196,20 @@ const App = () => {
                 }
               />
 
+              {/* Profile Routes */}
+              <Route
+                path="/profile"
+                element={
+                  <RouteGuard path="/profile">
+                    <CustomerRoute>
+                      <CustomerLayout>
+                        <Profile />
+                      </CustomerLayout>
+                    </CustomerRoute>
+                  </RouteGuard>
+                }
+              />
+
               {/* Catch all route */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
@@ -187,6 +224,7 @@ const App = () => {
               pauseOnFocusLoss
               draggable
               pauseOnHover
+              theme="light"
             />
           </OrderProvider>
         </CartProvider>

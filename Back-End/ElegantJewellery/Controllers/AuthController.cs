@@ -35,5 +35,20 @@ namespace ElegantJewellery.Controllers
             var response = await _userService.CheckEmailExistsAsync(email);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        // New endpoints for password reset
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult<ApiResponse<bool>>> ForgotPassword([FromBody] ForgotPasswordDto model)
+        {
+            var response = await _userService.ForgotPasswordAsync(model.Email);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult<ApiResponse<bool>>> ResetPassword([FromBody] ResetPasswordDto model)
+        {
+            var response = await _userService.ResetPasswordAsync(model.Token, model.NewPassword);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

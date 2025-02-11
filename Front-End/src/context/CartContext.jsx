@@ -9,15 +9,16 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  const fetchCart = async () => {
+  // Accept a parameter to indicate if this is the initial fetch.
+  const fetchCart = async (isInitial = false) => {
     if (!user) {
       setCart(null);
-      setLoading(false);
+      if (isInitial) setLoading(false);
       return;
     }
     
     try {
-      setLoading(true);
+      if (isInitial) setLoading(true);
       const response = await cartService.getCart();
       if (response.success) {
         setCart(response.data);
@@ -28,19 +29,20 @@ export const CartProvider = ({ children }) => {
       console.error('Error fetching cart:', error);
       setCart(null);
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCart();
+    // Use the flag on initial mount.
+    fetchCart(true);
   }, [user]);
 
   const addToCart = async (productId, quantity) => {
     try {
       const response = await cartService.addToCart(productId, quantity);
       if (response.success) {
-        // Instead of just setting the cart, fetch the latest cart data
+        // No need for a global loading change here.
         await fetchCart();
         return { success: true };
       }
@@ -54,6 +56,7 @@ export const CartProvider = ({ children }) => {
     try {
       const response = await cartService.updateQuantity(productId, quantity);
       if (response.success) {
+        // Do not trigger global loading spinner during updates.
         await fetchCart();
         return { success: true };
       }

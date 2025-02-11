@@ -598,3 +598,4 @@ C:\Users\som\Desktop\Github\CDAC Projects\DotNet\DotNet-Project-main\Back-End\El
 C:\Users\som\Desktop\Github\CDAC Projects\DotNet\DotNet-Project-main\Back-End\ElegantJewellery\obj\Debug\net9.0\ElegantJewellery.pdb
 C:\Users\som\Desktop\Github\CDAC Projects\DotNet\DotNet-Project-main\Back-End\ElegantJewellery\obj\Debug\net9.0\ElegantJewellery.genruntimeconfig.cache
 C:\Users\som\Desktop\Github\CDAC Projects\DotNet\DotNet-Project-main\Back-End\ElegantJewellery\obj\Debug\net9.0\ref\ElegantJewellery.dll
+C:\Users\som\Desktop\Github\CDAC Projects\DotNet\DotNet-Project-main\Back-End\ElegantJewellery\obj\Debug\net9.0\ElegantJewellery.sourcelink.json

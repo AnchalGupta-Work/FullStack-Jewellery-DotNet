@@ -28,6 +28,15 @@ export const authService = {
     return await api.get(`/auth/check-email?email=${email}`);
   },
 
+  // New methods for password reset
+  forgotPassword: async (email) => {
+    return await api.post('/auth/forgot-password', { email });
+  },
+
+  resetPassword: async (token, newPassword) => {
+    return await api.post('/auth/reset-password', { token, newPassword });
+  },
+
   // Admin methods
   getAllUsers: async () => {
     return await api.get('/users');

@@ -9,5 +9,7 @@ namespace ElegantJewellery.Services
         Task<ApiResponse<AuthResponseDto>> LoginAsync(LoginDto loginDto);
         Task<ApiResponse<UserResponseDto>> GetUserByIdAsync(int userId);
         Task<ApiResponse<bool>> CheckEmailExistsAsync(string email);
+        Task<ApiResponse<bool>> ForgotPasswordAsync(string email);
+        Task<ApiResponse<bool>> ResetPasswordAsync(string token, string newPassword);
     }
 }

@@ -7,10 +7,49 @@ namespace ElegantJewellery.Services
     public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
+        private readonly IConfiguration _configuration;
 
-        public EmailService(IOptions<EmailSettings> emailSettings)
+        public EmailService(IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailSettings = emailSettings.Value;
+            _configuration = configuration;
+        }
+
+        public async Task SendPasswordResetEmailAsync(string toEmail, string userName, string resetToken)
+        {
+            // Get the client URL from configuration
+            var clientUrl = "http://localhost:5173"; // or get from configuration
+            var resetUrl = $"{clientUrl}/reset-password?token={resetToken}";
+
+            var subject = "Reset Your Password - Elegant Jewellery";
+            var body = $@"
+            <h2>Hello {userName},</h2>
+            <p>We received a request to reset your password. Click the link below to set a new password:</p>
+            <p><a href='{resetUrl}' style='display: inline-block; background-color: #B4833E; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Reset Password</a></p>
+            <p>If you can't click the button, copy and paste this URL into your browser:</p>
+            <p>{resetUrl}</p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            <p>The link will expire in 30 minutes for security reasons.</p>
+            <br>
+            <p>Best regards,</p>
+            <p>The Elegant Jewellery Team</p>";
+
+            await SendEmailAsync(toEmail, subject, body);
+        }
+
+
+        public async Task SendPasswordChangeConfirmationAsync(string toEmail, string userName)
+        {
+            var subject = "Password Changed Successfully - Elegant Jewellery";
+            var body = $@"
+            <h2>Hello {userName},</h2>
+            <p>Your password has been successfully changed.</p>
+            <p>If you didn't make this change, please contact our support team immediately.</p>
+            <br>
+            <p>Best regards,</p>
+            <p>The Elegant Jewellery Team</p>";
+
+            await SendEmailAsync(toEmail, subject, body);
         }
 
         private async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
