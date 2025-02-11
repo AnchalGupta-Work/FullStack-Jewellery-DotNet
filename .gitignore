@@ -1,57 +1,147 @@
-# ================================
-# Global ignores
-# ================================
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Testing
+coverage
+
+# Production
+build
+dist
+dist-ssr
+*.local
 
 # Logs
+logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# ================================
-# Front-End (Vite + React)
-# ================================
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.user
 
-# Node modules and build output
-Front-End/node_modules/
-Front-End/dist/
+# Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
 
-# Environment variable files (do not commit secrets)
-Front-End/.env
-Front-End/.env.local
-Front-End/.env.development.local
-Front-End/.env.test.local
-Front-End/.env.production.local
+# .NET build output
+bin/
+obj/
 
-# Optional Vite cache directory
-Front-End/.vite/
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# ================================
-# Back-End (.NET)
-# ================================
+# Temporary files
+*.tmp
+*.temp
+*.cache
 
-# Build output folders for .NET
-Back-End/bin/
-Back-End/obj/
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# Ignore appsettings.json to protect secrets
-Back-End/appsettings.json
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
 
-# Visual Studio or Rider specific files
-Back-End/.vs/
-Back-End/*.user
-Back-End/*.suo
-Back-End/*.sln.docstates
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
 
-# Code analysis coverage folder
-Back-End/CoverageReport/
-Back-End/NCrunch_/
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
 
-# Dotnet local tool settings
-Back-End/.config/dotnet-tools.json
+# NuGet
+packages/
+*.nupkg
+*.snupkg
 
-# Visual Studio Code settings
-Back-End/.vscode/
+# User-specific files
+*.rsuser
+*.userosscache
+*.userprefs
 
-# Other temporary files
-Back-End/.cache/
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+.vs/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Vite specific
+*.timestamp-*.mjs
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
