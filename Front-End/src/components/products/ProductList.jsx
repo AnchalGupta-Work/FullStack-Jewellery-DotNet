@@ -11,9 +11,7 @@ const CATEGORIES = [
   { id: '1', name: 'Rings', icon: 'bi-circle', description: 'Engagement & Fashion Rings' },
   { id: '2', name: 'Necklaces', icon: 'bi-gem', description: 'Chains & Pendants' },
   { id: '3', name: 'Earrings', icon: 'bi-diamond', description: 'Studs & Drops' },
-  { id: '4', name: 'Bracelets', icon: 'bi-circle-half', description: 'Bangles & Chains' },
-  { id: '5', name: 'Traditional', icon: 'bi-flower1', description: 'Temple Jewelry' },
-  { id: '6', name: 'Sets', icon: 'bi-collection', description: 'Matching Sets' }
+  { id: '4', name: 'Bracelets', icon: 'bi-circle-half', description: 'Bangles & Chains' }
 ];
 
 const ProductList = () => {

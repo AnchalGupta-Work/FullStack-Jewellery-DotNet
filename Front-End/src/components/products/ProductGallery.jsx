@@ -7,7 +7,8 @@ const ProductGallery = ({ mainImage }) => {
     'https://cdn.bradojewellery.com/p/540x/1710404013885.jpeg',
     'https://cdn.bradojewellery.com/p/540x/1710406122399.jpeg',
     'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg',
-    'https://cdn.bradojewellery.com/p/540x/1710405811228.jpeg'
+    'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg'
+    
   ];
 
   const [selectedImage, setSelectedImage] = useState(images[0]);

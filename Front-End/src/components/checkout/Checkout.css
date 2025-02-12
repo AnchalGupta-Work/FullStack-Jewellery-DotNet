@@ -172,6 +172,18 @@
   object-fit: cover;
 }
 
+/* Ensure the button retains its primary color when loading */
+.btn-primary.loading {
+  background-color: var(--primary) !important; /* Keep the primary color */
+  border-color: var(--primary) !important; /* Keep the border color */
+  color: var(--neutral-100) !important; /* Keep the text color */
+}
+
+/* Style the spinner to match the button text color */
+.spinner-border {
+  color: var(--neutral-100); /* Set the spinner color to white */
+}
+
 /* Success Animation */
 @keyframes checkmark {
   0% {

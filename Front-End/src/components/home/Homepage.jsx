@@ -10,28 +10,28 @@ const HomePage = () => {
     {
       id: 1,
       name: 'Bridal Choker',
-      image: 'https://cdn.bradojewellery.com/is/540x/1713435297728.jpeg',
+      image: 'https://cdn.bradojewellery.com/is/540x/1724384731846.jpeg',
       description: 'Elegant for your special day',
       link: '/products?category=2'
     },
     {
       id: 2,
       name: 'Royalty Bangles',
-      image: 'https://cdn.bradojewellery.com/is/540x/1713435591278.jpeg',
+      image: 'https://cdn.bradojewellery.com/is/540x/1724384687830.jpeg',
       description: 'Beautiful bangles for every occasion',
       link: '/products?category=4'
     },
     {
       id: 3,
       name: 'Temple Earrings',
-      image: 'https://cdn.bradojewellery.com/is/540x/1713435401640.jpeg',
+      image: 'https://cdn.bradojewellery.com/is/540x/1724384709686.jpeg',
       description: 'Traditional temple jewelry earrings',
       link: '/products?category=3'
     },
     {
       id: 4,
       name: 'Exquisite Rings',
-      image: 'https://cdn.bradojewellery.com/is/540x/1713435346824.jpeg',
+      image: 'https://cdn.bradojewellery.com/is/540x/1724384670437.jpeg',
       description: 'Fine crafted rings for every style',
       link: '/products?category=1'
     }

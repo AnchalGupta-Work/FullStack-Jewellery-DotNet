@@ -115,7 +115,7 @@
 .current-price {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--primary);
+  color: #333333 !important;
 }
 
 .original-price {

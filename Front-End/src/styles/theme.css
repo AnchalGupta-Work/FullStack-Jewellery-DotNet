@@ -111,6 +111,17 @@ a:active {
 .btn-primary:focus-visible {
   box-shadow: 0 0 0 0.25rem rgba(233, 113, 139, 0.5) !important;
 }
+/* Ensure the button retains its primary color when loading */
+.btn-primary.loading {
+  background-color: var(--primary) !important; /* Keep the primary color */
+  border-color: var(--primary) !important; /* Keep the border color */
+  color: var(--neutral-100) !important; /* Keep the text color */
+}
+
+/* Style the spinner to match the button text color */
+.spinner-border {
+  color: var(--neutral-100); /* Set the spinner color to white */
+}
 
 /* Outline Primary Button */
 .btn-outline-primary {

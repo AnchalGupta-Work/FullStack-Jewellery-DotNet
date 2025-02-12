@@ -558,7 +558,7 @@ const Checkout = () => {
                 </button>
               )}
 
-              <button
+<button
                 className="btn btn-primary order-1 order-sm-2 w-100 w-sm-auto"
                 style={{ marginTop: '50px'}}
                 onClick={handleStepSubmit}

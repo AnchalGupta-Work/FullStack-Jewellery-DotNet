@@ -25,7 +25,8 @@ const ProductDetails = () => {
     mainImage,
     'https://cdn.bradojewellery.com/p/540x/1710404013885.jpeg',
     'https://cdn.bradojewellery.com/p/540x/1710406122399.jpeg',
-    'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg'
+    'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg',
+    
   ];
 
   useEffect(() => {
@@ -194,22 +195,22 @@ const ProductDetails = () => {
                     </div>
 
                     <button
-                      className="btn btn-primary btn-lg w-100 mb-3"
-                      onClick={handleAddToCart}
-                      disabled={addingToCart}
-                    >
-                      {addingToCart ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" />
-                          Adding to Cart...
-                        </>
-                      ) : (
-                        <>
-                          <i className="bi bi-cart-plus me-2"></i>
-                          Add to Cart
-                        </>
-                      )}
-                    </button>
+  className={`btn btn-primary btn-lg w-100 mb-3 ${addingToCart ? 'loading' : ''}`} // Added `${addingToCart ? 'loading' : ''}`
+  onClick={handleAddToCart}
+  disabled={addingToCart}
+>
+  {addingToCart ? (
+    <>
+      <span className="spinner-border spinner-border-sm me-2" />
+      Adding to Cart...
+    </>
+  ) : (
+    <>
+      <i className="bi bi-cart-plus me-2"></i>
+      Add to Cart
+    </>
+  )}
+</button>
                   </>
                 )}
 
