@@ -13,7 +13,7 @@ export default defineConfig({
           'router-vendor': ['react-router-dom'],
           'ui-vendor': ['react-bootstrap', 'bootstrap'],
           'chart-vendor': ['recharts'],
-          'icon-vendor': ['react-icons'] // Removed 'bootstrap-icons' from chunking
+          'icon-vendor': ['react-icons'] // ✅ Removed 'bootstrap-icons'
         }
       }
     },
@@ -39,8 +39,7 @@ export default defineConfig({
       'bootstrap',
       'recharts',
       'axios',
-      'react-icons',
-      'bootstrap-icons' // Ensure this is optimized properly
+      'react-icons' // ✅ Removed 'bootstrap-icons'
     ]
   }
 });
