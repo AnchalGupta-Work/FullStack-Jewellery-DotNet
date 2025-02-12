@@ -31,7 +31,7 @@ import Profile from './components/profile/Profile';
 
 // Styles
 import 'react-toastify/dist/ReactToastify.css';
-import './styles/HomePage.css';
+//import './styles/HomePage.css';
 import './styles/ProductCard.css';
 import './styles/admin.css';
 import './styles/theme.css';

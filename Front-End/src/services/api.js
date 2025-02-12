@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5135/api';
+const API_URL = 'https://elegantjewelleryshop.azurewebsites.net/api';
+//const API_URL = 'http://localhost:5135/api';
 
 const api = axios.create({
   baseURL: API_URL,
