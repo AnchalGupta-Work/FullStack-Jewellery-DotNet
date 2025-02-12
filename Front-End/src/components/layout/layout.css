@@ -1,0 +1,202 @@
+/* src/components/layout/layout.css */
+
+/* Shared Layout Styles */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding-top: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
+  }
+  
+  /* Navbar Styles */
+  .navbar {
+    padding: var(--spacing-4) 0;
+    background: var(--neutral-100);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .navbar-brand {
+    font-family: var(--font-primary);
+    color: var(--neutral-900);
+    font-size: var(--text-xl);
+  }
+  
+  .nav-link {
+    position: relative;
+    color: var(--neutral-700);
+    transition: color var(--transition-normal);
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--primary);
+  }
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transition: transform var(--transition-normal);
+  }
+  
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    transform: scaleX(1);
+  }
+  
+  /* Cart Badge */
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--primary);
+    font-size: var(--text-xs);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-full);
+    color: var(--neutral-100);
+  }
+  
+  /* User Dropdown */
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    color: var(--neutral-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+  
+  /* Footer Styles */
+  .footer {
+    background-color: var(--neutral-800);
+    color: var(--neutral-300);
+    padding-top: var(--spacing-12);
+    margin-top: var(--spacing-12);
+  }
+  
+  .footer-brand {
+    font-family: var(--font-primary);
+    font-size: var(--text-2xl);
+    color: var(--primary);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .footer-info p {
+    color: var(--neutral-400);
+    line-height: 1.8;
+  }
+  
+  .footer-title {
+    font-family: var(--font-primary);
+    color: var(--neutral-100);
+    font-size: var(--text-lg);
+    margin-bottom: var(--spacing-6);
+    position: relative;
+  }
+  
+  .footer-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    width: 50px;
+    height: 2px;
+    background-color: var(--primary);
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: var(--spacing-4);
+  }
+  
+  .footer-links a {
+    color: var(--neutral-400);
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    display: inline-block;
+  }
+  
+  .footer-links a:hover {
+    color: var(--primary);
+    transform: translateX(5px);
+  }
+  
+  .footer-bottom {
+    background-color: var(--neutral-900);
+    padding: var(--spacing-6) 0;
+    margin-top: var(--spacing-12);
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+    color: var(--neutral-500);
+  }
+  
+  /* Search Box */
+  .search-box {
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .search-box .form-control {
+    border-radius: var(--radius-full);
+    padding-left: var(--spacing-6);
+    background-color: var(--neutral-200);
+    border: none;
+  }
+  
+  .search-box .form-control:focus {
+    background-color: var(--neutral-100);
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .navbar-collapse {
+      background: var(--neutral-100);
+      padding: var(--spacing-4);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      position: absolute;
+      top: 100%;
+      left: var(--spacing-4);
+      right: var(--spacing-4);
+      z-index: var(--z-dropdown);
+    }
+  
+    .search-box {
+      max-width: 100%;
+      margin: var(--spacing-4) 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .footer {
+      padding-top: var(--spacing-8);
+      margin-top: var(--spacing-8);
+    }
+  
+    .footer-bottom {
+      margin-top: var(--spacing-8);
+      text-align: center;
+    }
+  }

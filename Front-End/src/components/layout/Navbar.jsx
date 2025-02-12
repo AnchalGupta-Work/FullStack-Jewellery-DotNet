@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import './Navbar.css';
+import './layout.css';
+
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -82,10 +83,7 @@ const Navbar = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button 
-                type="submit" 
-                className="btn btn-outline-secondary border-start-0"
-              >
+              <button type="submit" className="btn btn-outline-secondary border-start-0">
                 <i className="bi bi-search text-primary"></i>
               </button>
             </div>

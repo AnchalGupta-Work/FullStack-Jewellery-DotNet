@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { orderService } from '../../../services/orderService';
 import { productService } from '../../../services/productService';
 import { formatPrice } from '../../../utils/formatters';
-import './AdminDashboard.css';
+import './dashboard.css';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({

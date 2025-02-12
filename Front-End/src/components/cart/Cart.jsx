@@ -4,15 +4,96 @@ import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../utils/formatters';
 import Loading from '../common/Loading';
 import { toast } from 'react-toastify';
-import { CartItemImage } from '../common/ProductImage';
-import './Cart.css';
+import './cart.css';
+
+const CartItem = ({ 
+  item, 
+  onUpdateQuantity, 
+  onRemove, 
+  isUpdating, 
+  isRemoving 
+}) => {
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity !== item.quantity) {
+      onUpdateQuantity(item.productId, newQuantity);
+    }
+  };
+
+  return (
+    <div className={`cart-item ${isUpdating || isRemoving ? 'item-loading' : ''}`}>
+      <div className="row align-items-center">
+        <div className="col-md-2 col-4 mb-3 mb-md-0">
+          <div className="cart-item-image">
+            <img
+              src={item.imageUrl || '/placeholder.jpg'}
+              alt={item.productName}
+              onError={(e) => { e.target.src = '/placeholder.jpg' }}
+            />
+          </div>
+        </div>
+        
+        <div className="col-md-4 col-8 mb-3 mb-md-0">
+          <div className="cart-item-details">
+            <h6>{item.productName}</h6>
+            <p className="text-muted mb-1">
+              Unit Price: {formatPrice(item.productPrice)}
+            </p>
+            {item.availableStock <= 5 && (
+              <small className="text-warning">
+                Only {item.availableStock} left in stock
+              </small>
+            )}
+          </div>
+        </div>
+
+        <div className="col-md-3 col-6 mb-3 mb-md-0">
+          <div className="quantity-control">
+            <button
+              className="quantity-btn"
+              onClick={() => handleQuantityChange(item.quantity - 1)}
+              disabled={item.quantity <= 1 || isUpdating}
+            >
+              <i className="bi bi-dash"></i>
+            </button>
+            <input
+              type="text"
+              className="quantity-input"
+              value={item.quantity}
+              readOnly
+            />
+            <button
+              className="quantity-btn"
+              onClick={() => handleQuantityChange(item.quantity + 1)}
+              disabled={item.quantity >= item.availableStock || isUpdating}
+            >
+              <i className="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <div className="col-md-3 col-6 text-end">
+          <div className="fw-bold mb-2">
+            {formatPrice(item.subtotal)}
+          </div>
+          <button
+            className="remove-btn"
+            onClick={() => onRemove(item.productId)}
+            disabled={isRemoving}
+          >
+            <i className="bi bi-trash"></i>
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, loading } = useCart();
   const navigate = useNavigate();
   const [processingItems, setProcessingItems] = useState(new Set());
   const [removingItems, setRemovingItems] = useState(new Set());
-  const [bounce, setBounce] = useState(false);
 
   // Calculate estimated delivery date (3-5 business days)
   const getEstimatedDelivery = () => {
@@ -32,9 +113,7 @@ const Cart = () => {
     };
   };
 
-  const handleQuantityUpdate = async (productId, newQuantity, currentQuantity) => {
-    if (newQuantity === currentQuantity) return;
-    
+  const handleQuantityUpdate = async (productId, newQuantity) => {
     try {
       setProcessingItems(prev => new Set(prev).add(productId));
       const result = await updateQuantity(productId, newQuantity);
@@ -72,19 +151,17 @@ const Cart = () => {
 
   if (!cart?.items?.length) {
     return (
-      <div className="container py-5">
-        <div className="text-center">
-          <i className="bi bi-cart3 display-1 text-muted mb-4"></i>
-          <h2 className="mb-4">Your Cart is Empty</h2>
-          <p className="text-muted mb-4">
-            Looks like you haven't added anything to your cart yet.
-            <br />
-            Browse our collection and find something you'll love!
-          </p>
-          <Link to="/products" className="btn btn-primary btn-lg">
-            Start Shopping
-          </Link>
-        </div>
+      <div className="empty-cart">
+        <i className="bi bi-cart3"></i>
+        <h2>Your Cart is Empty</h2>
+        <p>
+          Looks like you haven't added anything to your cart yet.
+          <br />
+          Browse our collection and find something you'll love!
+        </p>
+        <Link to="/products" className="btn btn-primary btn-lg">
+          Start Shopping
+        </Link>
       </div>
     );
   }
@@ -92,175 +169,85 @@ const Cart = () => {
   const delivery = getEstimatedDelivery();
 
   return (
-    <div className="container py-4">
-      <div className="row g-4">
-        {/* Cart Items */}
-        <div className="col-lg-8">
-          <div className="card shadow-sm mb-4">
-            <div className="card-header bg-white py-3">
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">Shopping Cart ({cart.items.length} items)</h5>
-                <Link to="/products" className="btn btn-link text-decoration-none" style={{ color: '#212529'}}>
-                  Continue Shopping
-                </Link>
+    <div className="cart-page">
+      <div className="container">
+        <div className="row g-4">
+          {/* Cart Items */}
+          <div className="col-lg-8">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h4 className="mb-0">Shopping Cart ({cart.items.length} items)</h4>
+              <Link to="/products" className="btn btn-outline-secondary">
+                Continue Shopping
+              </Link>
+            </div>
+
+            {cart.totalAmount < 1000 && (
+              <div className="shipping-alert">
+                <i className="bi bi-info-circle"></i>
+                <span>
+                  Add {formatPrice(1000 - cart.totalAmount)} more to get free shipping!
+                </span>
               </div>
-            </div>
-            <div className="card-body">
-              {cart.items.map((item) => (
-                <div key={item.id} className="cart-item mb-4 pb-4 border-bottom">
-                  <div className="row align-items-center">
-                    <div className="col-md-2 mb-3 mb-md-0">
-                    <img
-    src={item.imageUrl || '/placeholder.jpg'}
-    alt={item.productName}
-    className="rounded me-3"
-    style={{ width: '64px', height: '64px', objectFit: 'cover' }}
-    onError={(e) => { e.target.src = '/placeholder.jpg' }}
-/>
-                      <Link to={`/products/${item.productId}`}>
+            )}
 
-                      </Link>
-                    </div>
-                    <div className="col-md-4 mb-3 mb-md-0">
-                      <Link 
-                        to={`/products/${item.productId}`}
-                        className="text-decoration-none text-dark"
-                      >
-                        <h6 className="mb-1">{item.productName}</h6>
-                      </Link>
-                      <p className="text-muted small mb-0">
-                        Category: {item.categoryName}
-                      </p>
-                      <p className="text-primary mb-0">
-                        {formatPrice(item.productPrice)}
-                      </p>
-                    </div>
-                    <div className="col-md-3 mb-3 mb-md-0">
-                      <div className="d-flex align-items-center">
-                        <div className="input-group input-group-sm" style={{ width: '120px' }}>
-                          <button 
-                            className="btn btn-outline-secondary"
-                            onClick={() => handleQuantityUpdate(
-                              item.productId, 
-                              item.quantity - 1,
-                              item.quantity
-                            )}
-                            disabled={
-                              item.quantity <= 1 || 
-                              processingItems.has(item.productId)
-                            }
-                          >
-                            <i className="bi bi-dash"></i>
-                          </button>
-                          <input
-                            type="text"
-                            className="form-control text-center"
-                            value={item.quantity}
-                            readOnly
-                          />
-                          <button 
-                            className="btn btn-outline-secondary"
-                            onClick={() => handleQuantityUpdate(
-                              item.productId, 
-                              item.quantity + 1,
-                              item.quantity
-                            )}
-                            disabled={
-                              item.quantity >= item.availableStock ||
-                              processingItems.has(item.productId)
-                            }
-                          >
-                            <i className="bi bi-plus"></i>
-                          </button>
-                        </div>
-                        {processingItems.has(item.productId) && (
-                          <div className="spinner-border spinner-border-sm ms-2" role="status">
-                            <span className="visually-hidden">Updating...</span>
-                          </div>
-                        )}
-                      </div>
-                      {item.quantity >= item.availableStock && (
-                        <small className="text-danger d-block mt-1">
-                          Max stock reached
-                        </small>
-                      )}
-                    </div>
-                    <div className="col-md-2 mb-3 mb-md-0 text-md-end">
-                      <div className="fw-bold mb-1">
-                        {formatPrice(item.subtotal)}
-                      </div>
-                      <button 
-                        className="btn btn-link btn-sm text-danger p-0"
-                        onClick={() => handleRemoveItem(item.productId)}
-                        disabled={removingItems.has(item.productId)}
-                      >
-                        {removingItems.has(item.productId) ? (
-                          <span className="spinner-border spinner-border-sm" role="status" />
-                        ) : (
-                          <i className="bi bi-trash me-1"></i>
-                        )}
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {cart.items.map((item) => (
+              <CartItem
+                key={item.productId}
+                item={item}
+                onUpdateQuantity={handleQuantityUpdate}
+                onRemove={handleRemoveItem}
+                isUpdating={processingItems.has(item.productId)}
+                isRemoving={removingItems.has(item.productId)}
+              />
+            ))}
           </div>
-        </div>
 
-        {/* Order Summary */}
-        <div className="col-lg-4">
-          <div className="card shadow-sm mb-4">
-            <div className="card-header bg-white py-3">
-              <h5 className="mb-0">Order Summary</h5>
-            </div>
-            <div className="card-body">
-              <div className="d-flex justify-content-between mb-2">
+          {/* Order Summary */}
+          <div className="col-lg-4">
+            <div className="order-summary">
+              <h5 className="summary-title">Order Summary</h5>
+              
+              <div className="summary-row">
                 <span>Subtotal</span>
                 <span>{formatPrice(cart.totalAmount)}</span>
               </div>
-              <div className="d-flex justify-content-between mb-2">
+              
+              <div className="summary-row">
                 <span>Shipping</span>
                 <span className="text-success">Free</span>
               </div>
-              {cart.totalAmount < 1000 && (
-                <div className="alert alert-info small mb-3">
-                  <i className="bi bi-info-circle me-2"></i>
-                  Add {formatPrice(1000 - cart.totalAmount)} more to get free shipping
-                </div>
-              )}
-              <hr />
-              <div className="d-flex justify-content-between mb-4">
-                <strong>Total</strong>
-                <strong>{formatPrice(cart.totalAmount)}</strong>
+              
+              <div className="summary-row total">
+                <span>Total</span>
+                <span>{formatPrice(cart.totalAmount)}</span>
               </div>
+
               <button 
                 className="btn btn-primary w-100 mb-3"
                 onClick={() => navigate('/checkout')}
               >
                 Proceed to Checkout
               </button>
+
               <div className="text-center">
                 <i className="bi bi-shield-check text-success me-2"></i>
                 <small className="text-muted">Secure Checkout</small>
               </div>
             </div>
-          </div>
 
-          {/* Delivery Estimate */}
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h6 className="mb-3">
-                <i className="bi bi-truck me-2"></i>
+            {/* Delivery Info */}
+            <div className="delivery-info">
+              <h6>
+                <i className="bi bi-truck"></i>
                 Estimated Delivery
               </h6>
               <p className="mb-0">
                 {delivery.min} - {delivery.max}
+                <br />
+                <small className="text-muted">
+                  Standard Delivery (3-5 business days)
+                </small>
               </p>
-              <small className="text-muted">
-                Standard Delivery (3-5 business days)
-              </small>
             </div>
           </div>
         </div>

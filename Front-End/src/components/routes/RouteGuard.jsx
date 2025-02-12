@@ -13,7 +13,7 @@ export const PROTECTED_ROUTES = {
     '/admin/customers'
   ],
   customer: [
-    '/',  
+    
     '/products',  
     '/cart',
     '/checkout',
