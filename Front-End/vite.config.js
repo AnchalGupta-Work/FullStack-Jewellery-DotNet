@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -13,7 +13,7 @@ export default defineConfig({
           'router-vendor': ['react-router-dom'],
           'ui-vendor': ['react-bootstrap', 'bootstrap'],
           'chart-vendor': ['recharts'],
-          'icon-vendor': ['react-icons', 'bootstrap-icons']
+          'icon-vendor': ['react-icons'] // Removed 'bootstrap-icons' from chunking
         }
       }
     },
@@ -38,7 +38,9 @@ export default defineConfig({
       'react-bootstrap',
       'bootstrap',
       'recharts',
-      'axios'
+      'axios',
+      'react-icons',
+      'bootstrap-icons' // Ensure this is optimized properly
     ]
   }
-})
+});
