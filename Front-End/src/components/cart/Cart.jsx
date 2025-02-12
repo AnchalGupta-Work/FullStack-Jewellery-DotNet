@@ -4,7 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../utils/formatters';
 import Loading from '../common/Loading';
 import { toast } from 'react-toastify';
-//import './cart.css';
+import './cart.css';
 
 const CartItem = ({ 
   item, 
