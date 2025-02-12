@@ -5,7 +5,7 @@ import { useOrders } from '../../context/OrderContext';
 import { formatPrice } from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import Loading from '../common/Loading';
-import './checkout.css';
+import './Checkout.css';
 
 const PAYMENT_METHODS = [
   { id: 'COD', name: 'Cash on Delivery', icon: 'bi-cash', description: 'Pay when you receive your order' },
