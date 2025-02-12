@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "Front-End/package.json",
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "Front-End/$1"
+    }
+  ],
+  "build": {
+    "env": {
+      "NODE_VERSION": "18.x"
+    }
+  },
+  "functions": {
+    "Front-End/api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "VITE_API_URL": "https://elegantjewelleryshop.azurewebsites.net/api"
+  }
+}
