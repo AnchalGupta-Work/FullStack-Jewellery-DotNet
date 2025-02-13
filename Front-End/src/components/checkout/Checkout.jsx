@@ -236,7 +236,7 @@ const Checkout = () => {
       const result = await createOrder(orderData);
       
       if (result.success) {
-        await clearCart();
+       // await clearCart();
         navigate(`/order-tracking/${result.order.id}`);
       } else {
         toast.error(result.message || 'Failed to place order');

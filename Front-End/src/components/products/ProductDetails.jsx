@@ -25,8 +25,7 @@ const ProductDetails = () => {
     mainImage,
     'https://cdn.bradojewellery.com/p/540x/1710404013885.jpeg',
     'https://cdn.bradojewellery.com/p/540x/1710406122399.jpeg',
-    'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg',
-    
+    'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg'
   ];
 
   useEffect(() => {
@@ -39,6 +38,7 @@ const ProductDetails = () => {
       const response = await productService.getProduct(id);
       if (response.success) {
         setProduct(response.data);
+        setQuantity(1); // Reset quantity when product changes
       } else {
         toast.error('Product not found');
         navigate('/products');
@@ -71,7 +71,7 @@ const ProductDetails = () => {
         toast.success('Product added to cart');
         navigate('/cart');
       } else {
-        toast.error(result.message);
+        toast.error(result.message || 'Failed to add product to cart');
       }
     } catch (error) {
       toast.error('Failed to add product to cart');
@@ -144,11 +144,6 @@ const ProductDetails = () => {
                 
                 <div className="product-price">
                   <span className="current-price">{formatPrice(product.price)}</span>
-                  {product.originalPrice > product.price && (
-                    <span className="original-price">
-                      {formatPrice(product.originalPrice)}
-                    </span>
-                  )}
                 </div>
 
                 <div className="stock-status mb-4">
@@ -195,22 +190,22 @@ const ProductDetails = () => {
                     </div>
 
                     <button
-  className={`btn btn-primary btn-lg w-100 mb-3 ${addingToCart ? 'loading' : ''}`} // Added `${addingToCart ? 'loading' : ''}`
-  onClick={handleAddToCart}
-  disabled={addingToCart}
->
-  {addingToCart ? (
-    <>
-      <span className="spinner-border spinner-border-sm me-2" />
-      Adding to Cart...
-    </>
-  ) : (
-    <>
-      <i className="bi bi-cart-plus me-2"></i>
-      Add to Cart
-    </>
-  )}
-</button>
+                      className={`btn btn-primary btn-lg w-100 mb-3 ${addingToCart ? 'loading' : ''}`}
+                      onClick={handleAddToCart}
+                      disabled={addingToCart}
+                    >
+                      {addingToCart ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" />
+                          Adding to Cart...
+                        </>
+                      ) : (
+                        <>
+                          <i className="bi bi-cart-plus me-2"></i>
+                          Add to Cart
+                        </>
+                      )}
+                    </button>
                   </>
                 )}
 

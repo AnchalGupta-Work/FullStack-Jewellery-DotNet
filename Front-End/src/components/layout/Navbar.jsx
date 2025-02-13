@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import './layout.css';
-
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -11,21 +10,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm(''); // Clear search after submission
     }
   };
 
@@ -66,140 +56,141 @@ const Navbar = () => {
       </div>
 
       {/* Main Navbar */}
-      <nav className={`navbar navbar-expand-lg bg-white ${isScrolled ? 'shadow-sm' : ''}`}>
+      <nav className="navbar navbar-expand-lg bg-white shadow-sm">
         <div className="container">
-          {/* Brand Logo */}
-          <Link to="/" className="navbar-brand d-flex align-items-center">
-            <span className="ms-2 h4 mb-0">Elegant</span>
-          </Link>
-
-          {/* Search Bar */}
-          <form className="d-none d-md-flex flex-grow-1 mx-4" onSubmit={handleSearch}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control border-end-0"
-                placeholder="Search for jewellery..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button type="submit" className="btn btn-outline-secondary border-start-0">
-                <i className="bi bi-search text-primary"></i>
-              </button>
-            </div>
-          </form>
-
-          {/* Navigation Links */}
-          <div className="d-flex align-items-center gap-3">
-            <Link to="/" className="text-decoration-none text-dark">
-              <i className="bi bi-house"></i>
-            </Link>
-            
-            <Link to="/products" className="text-decoration-none text-dark">
-              <i className="bi bi-gem"></i>
+          <div className="d-flex align-items-center w-100">
+            {/* Brand Logo */}
+            <Link to="/" className="navbar-brand">
+              <span className="h4 mb-0">Elegant</span>
             </Link>
 
-            {!user?.role?.includes('Admin') && (
-              <Link to="/cart" className="position-relative text-decoration-none text-dark">
-                <i className="bi bi-cart3 fs-5"></i>
-                {cart?.totalItems > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                    {cart.totalItems}
-                  </span>
-                )}
+            {/* Search Bar */}
+            {/* Search Bar */}
+<div className="flex-grow-1 mx-4">
+  <form onSubmit={handleSearch} className="search-form">
+    <div className="input-group">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Search for jewellery..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <button type="submit" className="btn">
+        <i className="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
+</div>
+
+            {/* Navigation Icons */}
+            <div className="d-flex align-items-center gap-3">
+              <Link to="/" className="nav-icon">
+                <i className="bi bi-house"></i>
               </Link>
-            )}
+              
+              <Link to="/products" className="nav-icon">
+                <i className="bi bi-gem"></i>
+              </Link>
 
-            {user ? (
-              <div className="dropdown">
-                <button
-                  className="btn btn-link text-dark text-decoration-none dropdown-toggle d-flex align-items-center"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                >
-                  <div 
-                    className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
-                    style={{ width: '32px', height: '32px' }}
-                  >
-                    {user.firstName?.charAt(0)}
-                  </div>
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end shadow-sm">
-                  {user.role === 'Admin' ? (
-                    <>
-                      <li><Link className="dropdown-item" to="/admin/dashboard">Dashboard</Link></li>
-                      <li><Link className="dropdown-item" to="/admin/products">Products</Link></li>
-                      <li><Link className="dropdown-item" to="/admin/orders">Orders</Link></li>
-                    </>
-                  ) : (
-                    <>
-                      <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
-                      <li><Link className="dropdown-item" to="/orders">Orders</Link></li>
-                    </>
+              {!user?.role?.includes('Admin') && (
+                <Link to="/cart" className="nav-icon position-relative">
+                  <i className="bi bi-cart3"></i>
+                  {cart?.totalItems > 0 && (
+                    <span className="cart-badge">
+                      {cart.totalItems}
+                    </span>
                   )}
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button 
-                      className="dropdown-item text-danger" 
-                      onClick={handleLogout}
-                    >
-                      <i className="bi bi-box-arrow-right me-2"></i>
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <Link 
-                to="/login" 
-                className="btn btn-primary rounded-pill px-4"
-              >
-                Login
-              </Link>
-            )}
+                </Link>
+              )}
+
+              {user ? (
+                <div className="dropdown">
+                  <button
+                    className="btn btn-link text-dark dropdown-toggle d-flex align-items-center"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                  >
+                    <div className="user-avatar">
+                      {user.firstName?.charAt(0)}
+                    </div>
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end">
+                    {user.role === 'Admin' ? (
+                      <>
+                        <li><Link className="dropdown-item" to="/admin/dashboard">Dashboard</Link></li>
+                        <li><Link className="dropdown-item" to="/admin/products">Products</Link></li>
+                        <li><Link className="dropdown-item" to="/admin/orders">Orders</Link></li>
+                      </>
+                    ) : (
+                      <>
+                        <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
+                        <li><Link className="dropdown-item" to="/orders">Orders</Link></li>
+                      </>
+                    )}
+                    <li><hr className="dropdown-divider" /></li>
+                    <li>
+                      <button 
+                        className="dropdown-item text-danger" 
+                        onClick={handleLogout}
+                      >
+                        <i className="bi bi-box-arrow-right me-2"></i>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <Link 
+                  to="/login" 
+                  className="btn btn-primary rounded-pill px-4"
+                >
+                  Login
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </nav>
-
-      {/* Category Navigation */}
-      <div className="bg-white border-top border-bottom">
-        <div className="container">
-          <ul className="nav justify-content-center py-2">
-            <li className="nav-item">
-              <Link 
-                to="/products?category=1" 
-                className="nav-link text-dark px-4"
-              >
-                Rings
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link 
-                to="/products?category=2" 
-                className="nav-link text-dark px-4"
-              >
-                Necklaces
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link 
-                to="/products?category=3" 
-                className="nav-link text-dark px-4"
-              >
-                Earrings
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link 
-                to="/products?category=4" 
-                className="nav-link text-dark px-4"
-              >
-                Bracelets
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+{/* Category Navigation */}
+<div className="category-nav bg-white border-top border-bottom">
+  <div className="container">
+    <ul className="nav justify-content-center py-2">
+      <li className="nav-item">
+        <Link 
+          to="/products?category=1" 
+          className="nav-link text-dark px-4"
+        >
+          Rings
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link 
+          to="/products?category=2" 
+          className="nav-link text-dark px-4"
+        >
+          Necklaces
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link 
+          to="/products?category=3" 
+          className="nav-link text-dark px-4"
+        >
+          Earrings
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link 
+          to="/products?category=4" 
+          className="nav-link text-dark px-4"
+        >
+          Bracelets
+        </Link>
+      </li>
+    </ul>
+  </div>
+</div>
     </>
   );
 };
