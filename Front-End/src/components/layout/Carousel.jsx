@@ -17,7 +17,7 @@ const Carousel = () => {
         <div className="carousel-item">
           <a href="#">
           <img
-            src="https://cdn.bradojewellery.com/b/1920x/1735214977409.jpeg"
+            src="https://cdn.bradojewellery.com/b/1920x/1739431637676.jpeg"
             className="d-block w-100"
             alt="Slide 2"
           />
@@ -27,7 +27,7 @@ const Carousel = () => {
         <div className="carousel-item">
           <a href="#">
           <img
-            src="https://cdn.bradojewellery.com/b/1920x/1735214944494.jpeg"
+            src="https://cdn.bradojewellery.com/b/1920x/1735214924357.jpeg"
             className="d-block w-100"
             alt="Slide 3"
           />

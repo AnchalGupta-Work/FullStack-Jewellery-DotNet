@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { productService } from '../../services/productService';
+import { formatPrice } from '../../utils/formatters';
 import './layout.css';
 
 const Navbar = () => {
@@ -9,14 +11,70 @@ const Navbar = () => {
   const { cart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Search states
   const [searchTerm, setSearchTerm] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef(null);
+
+  // Fetch suggestions when search term changes
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (!searchTerm.trim()) {
+        setSuggestions([]);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await productService.getAllProducts();
+        if (response.success) {
+          const filteredProducts = response.data
+            .filter(product => 
+              product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              product.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .slice(0, 5);
+          setSuggestions(filteredProducts);
+        }
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounceTimer = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [searchTerm]);
+
+  // Handle click outside suggestions
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
-      setSearchTerm(''); // Clear search after submission
+      setSearchTerm('');
+      setShowSuggestions(false);
     }
+  };
+
+  const handleSuggestionClick = (productId) => {
+    navigate(`/products/${productId}`);
+    setSearchTerm('');
+    setShowSuggestions(false);
   };
 
   const handleLogout = async () => {
@@ -65,23 +123,63 @@ const Navbar = () => {
             </Link>
 
             {/* Search Bar */}
-            {/* Search Bar */}
-<div className="flex-grow-1 mx-4">
-  <form onSubmit={handleSearch} className="search-form">
-    <div className="input-group">
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Search for jewellery..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button type="submit" className="btn">
-        <i className="bi bi-search"></i>
-      </button>
-    </div>
-  </form>
-</div>
+            <div className="flex-grow-1 mx-4" ref={searchRef}>
+              <form onSubmit={handleSearch} className="search-form">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search for jewellery..."
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setShowSuggestions(true);
+                    }}
+                    onFocus={() => setShowSuggestions(true)}
+                  />
+                  <button type="submit" className="btn">
+                    <i className="bi bi-search"></i>
+                  </button>
+                </div>
+
+                {/* Search Suggestions */}
+                {showSuggestions && searchTerm.trim() && (
+                  <div className="search-suggestions">
+                    {loading ? (
+                      <div className="suggestion-loading">
+                        <div className="spinner-border spinner-border-sm" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
+                    ) : suggestions.length > 0 ? (
+                      suggestions.map((product) => (
+                        <div
+                          key={product.id}
+                          className="suggestion-item"
+                          onClick={() => handleSuggestionClick(product.id)}
+                        >
+                          <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="suggestion-img"
+                            onError={(e) => { e.target.src = '/placeholder.jpg' }}
+                          />
+                          <div className="suggestion-details">
+                            <div className="suggestion-name">{product.name}</div>
+                            <div className="suggestion-category">{product.categoryName}</div>
+                            <div className="suggestion-price">{formatPrice(product.price)}</div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-suggestions">
+                        No products found
+                      </div>
+                    )}
+                  </div>
+                )}
+              </form>
+            </div>
 
             {/* Navigation Icons */}
             <div className="d-flex align-items-center gap-3">
@@ -152,45 +250,46 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-{/* Category Navigation */}
-<div className="category-nav bg-white border-top border-bottom">
-  <div className="container">
-    <ul className="nav justify-content-center py-2">
-      <li className="nav-item">
-        <Link 
-          to="/products?category=1" 
-          className="nav-link text-dark px-4"
-        >
-          Rings
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link 
-          to="/products?category=2" 
-          className="nav-link text-dark px-4"
-        >
-          Necklaces
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link 
-          to="/products?category=3" 
-          className="nav-link text-dark px-4"
-        >
-          Earrings
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link 
-          to="/products?category=4" 
-          className="nav-link text-dark px-4"
-        >
-          Bracelets
-        </Link>
-      </li>
-    </ul>
-  </div>
-</div>
+
+      {/* Category Navigation */}
+      <div className="category-nav bg-white border-top border-bottom">
+        <div className="container">
+          <ul className="nav justify-content-center py-2">
+            <li className="nav-item">
+              <Link 
+                to="/products?category=1" 
+                className="nav-link text-dark px-4"
+              >
+                Rings
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link 
+                to="/products?category=2" 
+                className="nav-link text-dark px-4"
+              >
+                Necklaces
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link 
+                to="/products?category=3" 
+                className="nav-link text-dark px-4"
+              >
+                Earrings
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link 
+                to="/products?category=4" 
+                className="nav-link text-dark px-4"
+              >
+                Bracelets
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,14 +1,17 @@
+/* src/components/admin/layout/AdminLayout.css */
+
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  background-color: var(--neutral-200);
 }
 
 /* Sidebar Styles */
 .admin-sidebar {
   width: 280px;
-  background: #1a1c23;
-  color: #a0aec0;
-  transition: all 0.3s ease;
+  background: var(--neutral-900);
+  color: var(--neutral-300);
+  transition: all var(--transition-normal);
   position: fixed;
   top: 0;
   left: 0;
@@ -16,7 +19,6 @@
   z-index: 1000;
 }
 
-/* Reset width when not collapsed */
 .admin-sidebar:not(.collapsed) {
   width: 280px;
 }
@@ -38,22 +40,23 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: white;
+  color: var(--neutral-100);
   text-decoration: none;
+  font-family: var(--font-primary);
 }
 
 .brand-logo img {
   width: 32px;
   height: 32px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
 }
 
 .brand-text {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 600;
   white-space: nowrap;
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .collapsed .brand-text {
@@ -64,17 +67,17 @@
 .toggle-btn {
   background: none;
   border: none;
-  color: #a0aec0;
+  color: var(--neutral-400);
   cursor: pointer;
   padding: 0.5rem;
-  transition: color 0.3s ease;
+  transition: color var(--transition-normal);
 }
 
 .toggle-btn:hover {
-  color: white;
+  color: var(--neutral-100);
 }
 
-/* User Profile Section */
+/* Admin Profile */
 .admin-profile {
   padding: 1.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -89,17 +92,18 @@
 .avatar {
   width: 40px;
   height: 40px;
-  background: #B4833E;
+  background: var(--primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--neutral-100);
   font-weight: 600;
+  font-family: var(--font-primary);
 }
 
 .user-details {
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .collapsed .user-details {
@@ -108,14 +112,15 @@
 }
 
 .user-name {
-  color: white;
+  color: var(--neutral-100);
   font-weight: 500;
   margin: 0;
+  font-family: var(--font-primary);
 }
 
 .user-role {
-  color: #a0aec0;
-  font-size: 0.875rem;
+  color: var(--neutral-400);
+  font-size: var(--text-sm);
   margin: 0;
 }
 
@@ -134,24 +139,24 @@
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  color: #a0aec0;
+  color: var(--neutral-400);
   text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
 }
 
 .nav-link:hover {
   background: rgba(255,255,255,0.1);
-  color: white;
+  color: var(--neutral-100);
 }
 
 .nav-link.active {
-  background: #B4833E;
-  color: white;
+  background: var(--primary);
+  color: var(--neutral-100);
 }
 
 .nav-icon {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   min-width: 24px;
   text-align: center;
 }
@@ -159,7 +164,7 @@
 .nav-text {
   white-space: nowrap;
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .collapsed .nav-text {
@@ -171,8 +176,8 @@
 .admin-main {
   flex: 1;
   margin-left: 280px;
-  transition: margin-left 0.3s ease;
-  background: #f8f9fa;
+  transition: margin-left var(--transition-normal);
+  background: var(--neutral-200);
 }
 
 .admin-main.collapsed {
@@ -182,8 +187,8 @@
 /* Top Navigation */
 .top-nav {
   height: 70px;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--neutral-100);
+  border-bottom: 1px solid var(--neutral-200);
   padding: 0 2rem;
   display: flex;
   align-items: center;
@@ -191,8 +196,9 @@
 }
 
 .page-title {
-  font-size: 1.5rem;
-  color: #2d3748;
+  font-family: var(--font-primary);
+  font-size: var(--text-2xl);
+  color: var(--neutral-900);
   margin: 0;
 }
 
@@ -205,26 +211,26 @@
 .notification-btn {
   background: none;
   border: none;
-  color: #718096;
+  color: var(--neutral-600);
   padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   position: relative;
 }
 
 .notification-btn:hover {
-  background: #f7fafc;
-  color: #2d3748;
+  background: var(--neutral-200);
+  color: var(--neutral-900);
 }
 
 .notification-badge {
   position: absolute;
   top: 0;
   right: 0;
-  background: #B4833E;
-  color: white;
-  font-size: 0.75rem;
+  background: var(--primary);
+  color: var(--neutral-100);
+  font-size: var(--text-xs);
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -236,6 +242,17 @@
 /* Content Area */
 .content-wrapper {
   padding: 2rem;
+}
+
+/* Mobile Menu */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--neutral-600);
+  font-size: var(--text-xl);
+  cursor: pointer;
+  padding: 0.5rem;
 }
 
 /* Responsive Design */
@@ -257,13 +274,16 @@
   }
 }
 
-/* Mobile Menu Button */
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  color: #718096;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 1rem;
+  }
+
+  .top-nav {
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    font-size: var(--text-xl);
+  }
 }

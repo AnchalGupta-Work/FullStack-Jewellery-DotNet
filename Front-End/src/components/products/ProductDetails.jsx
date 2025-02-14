@@ -16,21 +16,27 @@ const ProductDetails = () => {
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Simulated multiple images
-  const getProductImages = (mainImage) => [
-    mainImage,
-    'https://cdn.bradojewellery.com/p/540x/1710404013885.jpeg',
-    'https://cdn.bradojewellery.com/p/540x/1710406122399.jpeg',
-    'https://cdn.bradojewellery.com/p/540x/1710405940481.jpeg'
+  // Additional images - in real app, these would come from the product data
+  const additionalImages = [
+    'https://cdn.bradojewellery.com/p/200x/1691224769933.jpeg',
+    'https://cdn.bradojewellery.com/p/200x/1691224769933.jpeg',
+    'https://cdn.bradojewellery.com/p/200x/1691224769933.jpeg',
+    'https://cdn.bradojewellery.com/p/200x/1691224769933.jpeg'
   ];
 
   useEffect(() => {
     fetchProductDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedImage(product.imageUrl);
+    }
+  }, [product]);
 
   const fetchProductDetails = async () => {
     try {
@@ -38,7 +44,7 @@ const ProductDetails = () => {
       const response = await productService.getProduct(id);
       if (response.success) {
         setProduct(response.data);
-        setQuantity(1); // Reset quantity when product changes
+        setQuantity(1);
       } else {
         toast.error('Product not found');
         navigate('/products');
@@ -83,8 +89,6 @@ const ProductDetails = () => {
   if (loading) return <Loading />;
   if (!product) return null;
 
-  const images = getProductImages(product.imageUrl);
-
   return (
     <div className="product-details-page">
       <div className="container py-4">
@@ -112,22 +116,35 @@ const ProductDetails = () => {
               <div className="product-gallery">
                 <div className="main-image-container">
                   <img
-                    src={images[selectedImage]}
+                    src={selectedImage}
                     alt={product.name}
                     className="main-image"
                     onError={(e) => { e.target.src = '/placeholder.jpg' }}
                   />
                 </div>
                 <div className="thumbnail-grid">
-                  {images.map((image, index) => (
+                  {/* Main product image thumbnail */}
+                  <button
+                    className={`thumbnail-btn ${selectedImage === product.imageUrl ? 'active' : ''}`}
+                    onClick={() => setSelectedImage(product.imageUrl)}
+                  >
+                    <img
+                      src={product.imageUrl}
+                      alt={`${product.name} - Main`}
+                      onError={(e) => { e.target.src = '/placeholder.jpg' }}
+                    />
+                  </button>
+                  
+                  {/* Additional image thumbnails */}
+                  {additionalImages.map((img, index) => (
                     <button
                       key={index}
-                      className={`thumbnail-btn ${selectedImage === index ? 'active' : ''}`}
-                      onClick={() => setSelectedImage(index)}
+                      className={`thumbnail-btn ${selectedImage === img ? 'active' : ''}`}
+                      onClick={() => setSelectedImage(img)}
                     >
                       <img
-                        src={image}
-                        alt={`${product.name} view ${index + 1}`}
+                        src={img}
+                        alt={`${product.name} - View ${index + 1}`}
                         onError={(e) => { e.target.src = '/placeholder.jpg' }}
                       />
                     </button>
@@ -159,29 +176,28 @@ const ProductDetails = () => {
                   <>
                     <div className="quantity-selector mb-4">
                       <label className="form-label">Quantity</label>
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="input-group" style={{ width: '140px' }}>
+                      <div className="d-flex align-items-center">
+                        <div className="quantity-control">
                           <button
-                            className="btn btn-outline-secondary"
-                            type="button"
+                            className="quantity-btn"
                             onClick={() => handleQuantityChange(quantity - 1)}
-                            disabled={quantity <= 1}
+                            disabled={quantity <= 1 || addingToCart}
                           >
                             <i className="bi bi-dash"></i>
                           </button>
                           <input
                             type="number"
-                            className="form-control text-center"
+                            className="quantity-input"
                             value={quantity}
                             onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
                             min="1"
                             max={product.stock}
+                            disabled={addingToCart}
                           />
                           <button
-                            className="btn btn-outline-secondary"
-                            type="button"
+                            className="quantity-btn"
                             onClick={() => handleQuantityChange(quantity + 1)}
-                            disabled={quantity >= product.stock}
+                            disabled={quantity >= product.stock || addingToCart}
                           >
                             <i className="bi bi-plus"></i>
                           </button>
@@ -190,13 +206,13 @@ const ProductDetails = () => {
                     </div>
 
                     <button
-                      className={`btn btn-primary btn-lg w-100 mb-3 ${addingToCart ? 'loading' : ''}`}
+                      className="btn btn-primary btn-lg w-100 mb-3"
                       onClick={handleAddToCart}
                       disabled={addingToCart}
                     >
                       {addingToCart ? (
                         <>
-                          <span className="spinner-border spinner-border-sm me-2" />
+                          <span className="spinner-border spinner-border-sm text-light me-2" />
                           Adding to Cart...
                         </>
                       ) : (
