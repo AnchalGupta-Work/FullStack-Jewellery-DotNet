@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const API_URL = 'https://elegantjewelleryshop.azurewebsites.net/api';
-//const API_URL = 'http://localhost:5135/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -26,6 +25,14 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    // Handle unauthorized errors (expired or invalid token)
+    if (error.response?.status === 401) {
+      // Clear auth data
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      // Redirect to login page
+      window.location.href = '/login';
+    }
     const message = error.response?.data?.message || 'An error occurred';
     return Promise.reject({ message });
   }

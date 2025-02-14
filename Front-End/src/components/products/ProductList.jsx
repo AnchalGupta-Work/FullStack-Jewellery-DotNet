@@ -123,16 +123,32 @@ const ProductList = () => {
 
   return (
     <div className="products-page">
-      {/* Hero Section */}
-      <div className="products-hero">
-        <div className="container">
-          <h1 className="hero-title">Our Collection</h1>
-          <p className="hero-description">
-            Discover our exquisite collection of handcrafted jewellery pieces, 
-            designed to make every moment special.
-          </p>
-        </div>
-      </div>
+      
+
+{/* Hero Section */}
+<div className="products-hero" style={{
+  backgroundImage: "url('https://www.giva.co/cdn/shop/files/web_copy_2-min_8f3cf049-cbcf-4b35-9631-ac3bb2e07373.jpg?v=1736756469&width=1500')",
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  position: 'relative'
+}}>
+  <div style={{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)' // Dark overlay
+  }}></div>
+  <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+    <h1 className="hero-title">Our Collection</h1>
+    <p className="hero-description">
+      Discover our exquisite collection of handcrafted jewellery pieces, 
+      designed to make every moment special.
+    </p>
+  </div>
+</div>
 
       <div className="container">
         <div className="row g-4">

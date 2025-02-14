@@ -56,20 +56,25 @@ const Register = () => {
         }
         break;
 
-      case 'password':
-        if (!value) {
-          fieldError = 'Password is required';
-        } else if (value.length < 6) {
-          fieldError = 'Password must be at least 6 characters';
-        } else if (!/\d/.test(value)) {
-          fieldError = 'Password must contain at least one number';
-        } else if (!/[a-z]/.test(value)) {
-          fieldError = 'Password must contain at least one lowercase letter';
-        } else if (!/[A-Z]/.test(value)) {
-          fieldError = 'Password must contain at least one uppercase letter';
-        }
-        break;
-
+        case 'password':
+          if (!value) {
+            fieldError = 'Password is required';
+          } else if (value.length < 8 || value.length > 128) {
+            fieldError = 'Password must be between 8 and 128 characters';
+          } else if (!/\d/.test(value)) {
+            fieldError = 'Password must contain at least one number';
+          } else if (!/[a-z]/.test(value)) {
+            fieldError = 'Password must contain at least one lowercase letter';
+          } else if (!/[A-Z]/.test(value)) {
+            fieldError = 'Password must contain at least one uppercase letter';
+          } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+            fieldError = 'Password must contain at least one special character';
+          } else if (/(.)\1{2,}/.test(value)) {
+            fieldError = 'Password cannot contain repeated characters more than twice in a row';
+          } else if (/^[A-Za-z]+$|^\d+$/.test(value)) {
+            fieldError = 'Password cannot consist of only letters or only numbers';
+          }
+          break;
       case 'confirmPassword':
         if (!value) {
           fieldError = 'Please confirm your password';
