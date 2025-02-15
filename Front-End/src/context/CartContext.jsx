@@ -9,6 +9,11 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
+  useEffect(() => {
+    // Use the flag on initial mount.
+    fetchCart(true);
+  }, [user]);
+
   // Accept a parameter to indicate if this is the initial fetch.
   const fetchCart = async (isInitial = false) => {
     if (!user) {
@@ -33,10 +38,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    // Use the flag on initial mount.
-    fetchCart(true);
-  }, [user]);
+ 
 
   const addToCart = async (productId, quantity) => {
     try {
@@ -79,19 +81,21 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const clearCart = async () => {
-    try {
-      const response = await cartService.clearCart();
-      if (response.success) {
-        setCart(null);
-        return { success: true };
-      }
-      return { success: false, message: response.message };
-    } catch (error) {
-      return { success: false, message: error.message };
-    }
-  };
 
+
+const clearCart = async () => {
+  try {
+    const response = await cartService.clearCart();
+    if (response.success) {
+      setCart(null);
+      await fetchCart();
+      return { success: true };
+    }
+    return { success: false, message: response.message };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
   return (
     <CartContext.Provider
       value={{

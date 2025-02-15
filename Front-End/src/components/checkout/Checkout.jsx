@@ -42,11 +42,12 @@ const Checkout = () => {
   const [touched, setTouched] = useState({});
 
   useEffect(() => {
-    if (!cartLoading && (!cart || !cart.items || cart.items.length === 0)) {
+    // Only check cart on initial mount
+    if (!cartLoading && (!cart?.items?.length)) {
       toast.error('Your cart is empty');
-      navigate('/cart');
+      navigate('/cart', { replace: true }); // Using replace to prevent back navigation to empty checkout
     }
-  }, [cart, cartLoading, navigate]);
+  }, []);
 
   const validatePincode = async (pincode) => {
     if (pincode.length === 6) {
@@ -236,14 +237,20 @@ const Checkout = () => {
       const result = await createOrder(orderData);
       
       if (result.success) {
-       // await clearCart();
+        // Show success toast first
+        toast.success('Order placed successfully');
+        
+        // Wait a brief moment for the cart to clear
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        // Navigate to order tracking
         navigate(`/order-tracking/${result.order.id}`);
       } else {
         toast.error(result.message || 'Failed to place order');
       }
     } catch (error) {
-      toast.error('Error placing order');
       console.error('Order error:', error);
+      toast.error('Error placing order');
     } finally {
       setProcessing(false);
     }

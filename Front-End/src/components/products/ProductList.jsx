@@ -31,7 +31,7 @@ const ProductList = () => {
     sort: searchParams.get('sort') || 'latest',
     search: searchParams.get('search') || '',
     minPrice: 0,
-    maxPrice: 250000
+    maxPrice: 10000
   });
 
   useEffect(() => {
@@ -190,8 +190,8 @@ const ProductList = () => {
                     type="range"
                     className="form-range"
                     min="0"
-                    max="250000"
-                    step="5000"
+                    max="10000"
+                    step="100"
                     value={filters.maxPrice}
                     onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                   />
@@ -247,7 +247,7 @@ const ProductList = () => {
                       sort: 'latest',
                       search: '',
                       minPrice: 0,
-                      maxPrice: 250000
+                      maxPrice: 10000
                     });
                     updateURL({
                       category: 'all',

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { orderService } from '../services/orderService';
+import { useCart } from './CartContext';
 import { toast } from 'react-toastify';
 
 const OrderContext = createContext(null);
@@ -7,16 +8,16 @@ const OrderContext = createContext(null);
 export const OrderProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { clearCart } = useCart();
 
   const createOrder = async (orderData) => {
     try {
       setLoading(true);
-      console.log('Creating order with data:', orderData);
       const response = await orderService.createOrder(orderData);
-      console.log('Order creation response:', response);
-
+  
       if (response.success) {
-        // Add the new order to the orders list
+        // Clear cart silently without navigation
+        await clearCart();
         setOrders(prev => [response.data, ...prev]);
         return { 
           success: true, 

@@ -94,7 +94,8 @@
 }
 
 .search-form .btn:hover {
-  background: var(--primary-dark);
+  background: var(--primary);
+  color: var(--neutral-100);
 }
 
 /* Search Suggestions */
@@ -255,7 +256,7 @@
 }
 
 .dropdown-item.text-danger:hover {
-  background: var(--danger);
+  background: var(--neutral-200);
   color: var(--neutral-100);
 }
 
