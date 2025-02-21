@@ -18,7 +18,8 @@ namespace ElegantJewellery.Services
         public async Task SendPasswordResetEmailAsync(string toEmail, string userName, string resetToken)
         {
             // Get the client URL from configuration
-            var clientUrl = "http://localhost:5173"; // or get from configuration
+            //var clientUrl = "http://localhost:5173"; // or get from configuration
+            var clientUrl = "https://elegantjewellery.vercel.app/";    
             var resetUrl = $"{clientUrl}/reset-password?token={resetToken}";
 
             var subject = "Reset Your Password - Elegant Jewellery";
